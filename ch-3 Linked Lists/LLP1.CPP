@@ -1,12 +1,25 @@
+/*
+Problem 1: Implementing Stack using Linked List
+Time Complexity: O(1) except for DeleteStack: O(n)
+Space Complexity: O(n)
+**/
+
 #include<iostream>
 #include<stdlib.h>
 using namespace std;
 
+/*
+defining the structure
+**/
 typedef struct stl {
   int data;
   struct stl *next;
 } stll;
 
+/*
+Method to push element into stack
+Time Complexity: O(1)
+**/
 void push (stll **head, int data) {
   stll *newNode = NULL, *temp = NULL;
   newNode = (stll*) malloc(sizeof(stll));
@@ -22,7 +35,10 @@ void push (stll **head, int data) {
   }
 }
 
-
+/*
+Method to print all elements of stack
+Time Complexity: O(n)
+**/
 void print (stll **head) {
   stll *temp=*head;
   while(temp != NULL) {
@@ -30,6 +46,10 @@ void print (stll **head) {
     temp = temp->next;
   }
 }
+/*
+Method to get top element of stack
+Time Complexity: O(1)
+**/
 int getTop (stll **head) {
   if(*head == NULL) {
     cout<<"\nStack Empty, returning 0";
@@ -44,6 +64,10 @@ int isEmpty (stll **head) {
   else
     return 0;
 }
+/*
+Method to pop element of stack
+Time Complexity: O(1)
+**/
 int pop (stll **head) {
   if(isEmpty(&(*head))) {
     return 0;
@@ -55,6 +79,11 @@ int pop (stll **head) {
     return data;
   }
 }
+
+/*
+Method to delete all elements of stack
+Time Complexity: O(n)
+**/
 void deleteStack (stll **head) {
   stll *temp = *head, *temp2=NULL;
   while(temp != NULL) {
@@ -63,6 +92,8 @@ void deleteStack (stll **head) {
     free (temp2);
   }
 }
+
+
 int main (void) {
   stll *head = NULL;
   push(&head, 1);
