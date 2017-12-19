@@ -1,5 +1,6 @@
 /*
-  * Problem 10: Check if linked list is NULL terminated or not using Floyd Algorithm
+  * Problem 11: Check if linked list is NULL terminated or not using Floyd Algorithm. If it's not NULL
+  * terminated then find the start of loop
   * Time Complexity: O(n)
   * Space Complexity: O(1)
 **/
@@ -57,7 +58,7 @@ void printsll (sll **head) {
 
 
 /*
-Method to detect if Linked list has a loop using Floyd Algorithm
+Method to detect if Linked list has a loop using Floyd Algorithm. If loop is there then find it's start node
 **/
 void findLoop (sll **head) {
   sll *slow = *head, *fast = *head;
@@ -70,10 +71,15 @@ void findLoop (sll **head) {
       break;
     }
   }
-  if (flag == 1)
-    cout<<"\nIt's a snail";
-  else
-    cout<<"\nIt's a snake";
+  if (flag == 1) {
+    slow = *head;
+    while (slow != fast) {
+      slow = slow->next;
+      fast = fast->next;
+    }
+    cout<<"\nStart of loop:"<<slow->data;
+  } else
+    cout<<"\nList is null terminated";
 }
 
 int main (void) {
