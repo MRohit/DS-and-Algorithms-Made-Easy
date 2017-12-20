@@ -1,5 +1,5 @@
 /*
-Problem 30: Merge two sorted list using non-recursive approach
+Problem 31: Merge two sorted list using non-recursive approach
 Time Complexity: O(m+n) m,n are length of two list
 Space Complexity: O(1)
 **/

@@ -1,5 +1,5 @@
 /*
-Problem 30: Merge two sorted list
+Problem 31: Merge two sorted list
 Time Complexity: O(m+n) m,n are length of two list
 Space Complexity: O(1)
 **/
