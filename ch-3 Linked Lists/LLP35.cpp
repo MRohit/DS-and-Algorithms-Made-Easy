@@ -6,6 +6,7 @@ Space Complexity: O(1)
 
 #include<iostream>
 #include<stdlib.h>
+using namespace std;
 
 /*
 defining the structure
@@ -70,11 +71,11 @@ void splitCircularList (cll **head) {
 }
 int main (void) {
   cll *head = NULL;
-  insert(&head, 1);
-  insert(&head, 2);
-  insert(&head, 3);
-  insert(&head, 4);
-  print(&head);
-  splitCircularList(&head);
+  insert (&head, 1);
+  insert (&head, 2);
+  insert (&head, 3);
+  insert (&head, 4);
+  print (&head);
+  splitCircularList (&head);
   return 0;
 }
