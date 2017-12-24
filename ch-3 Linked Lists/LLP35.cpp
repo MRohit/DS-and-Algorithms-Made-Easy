@@ -49,24 +49,31 @@ void print (cll **head) {
 Method to divide the circular linked list into two parts
 **/
 void splitCircularList (cll **head) {
-  cll *temp, *slow = *head, *fast = *head, *head1 = NULL, *head2 = NULL;
-  // if odd nodes are there then fast->next points to last
-  // else it points to second last
+  // head1 for first half and head2 for second half
+  cll *head1 = *head, *head2 = *head, *temp = NULL;
+  cll *slow = *head, *fast = *head;
   while (fast->next != *head && fast->next->next != *head) {
     slow = slow->next;
     fast = fast->next->next;
+    //cout<<"\nSlow:"<<slow->data<<"\tFast:"<<fast->data;
   }
+  cout<<"\nSlow:"<<slow->data<<"\tFast:"<<fast->data;
+  // make second half circular
   if (fast->next->next == *head)
     fast = fast->next;
-  cout<<"\nslow->data:"<<slow->data<<"\nfast->data:\n"<<fast->data;
-  fast->next = slow->next;
-  head1 = slow->next;
-  print (&head1);
 
-  slow->next = *head;
-  head2 = *head;
-  cout<<endl;
+  if ((*head)->next != *head)
+    head2 = slow->next;
+
+  fast->next = slow->next;
+  cout<<"\nSecond half:";
   print (&head2);
+
+  // make first half circular
+  slow->next = *head;
+  cout<<"\nFirst half:";
+  print (&head1);
+  cout<<endl;
 
 }
 int main (void) {
@@ -75,6 +82,7 @@ int main (void) {
   insert (&head, 2);
   insert (&head, 3);
   insert (&head, 4);
+  insert (&head, 5);
   print (&head);
   splitCircularList (&head);
   return 0;
