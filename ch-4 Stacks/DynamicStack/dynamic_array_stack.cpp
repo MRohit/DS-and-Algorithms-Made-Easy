@@ -1,11 +1,12 @@
 /*
-* Stack ADT implemention using simple Array
+* Stack ADT implemention using dynamic Array
 Time Complexity: 1. Push - O(1)
                  2. Pop - O(1)
                  3. isEmpty - O(1)
                  4. isFull - O(1)
                  5. getTop - O(1)
 Space Complexity: O(n)
+Performance issue: Too many doublings may cause memory overflow exception
 **/
 
 #include<iostream>
