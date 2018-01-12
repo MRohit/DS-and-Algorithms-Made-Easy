@@ -61,6 +61,59 @@ void deleteStack (stack *st) {
   }
 }
 
+/*
+Method to find if output is permutation combination of input using stack's push and pop operation.
+**/
+void isPossible (int nos[], int sequence [], int n) {
+
+  queue <int> input;
+  for (int i = 0;i < n; i ++) {
+    input.push (nos[i]);
+  }
+  queue <int> output;
+  for (int i = 0; i < n; i ++) {
+    output.push (sequence[i]);
+  }
+
+  stack *st = initializeStack (20);
+  while (!input.empty()) {
+    int no = input.front ();
+    input.pop ();
+    if (no == output.front ()) {
+      output.pop ();
+      while (!isEmpty (st)) {
+        if (getTop (st) == output.front ()) {
+          //cout<<"\nPop:"<<
+          pop (st);
+          output.pop ();
+        } else {
+          break;
+        }
+      }
+    } else {
+      //cout<<"\nPush:"<<no;
+      push (st, no);
+
+    }
+  }
+
+  if (isEmpty (st) && input.empty ()) {
+    cout<<"\nPossible";
+  } else {
+    cout<<"\nNot Possible";
+  }
+
+}
 int main (void) {
-  queue<int>
+  int nos[] = {1,2,3};
+  int seq[] = {2,1,3};
+  int n = 3;
+  isPossible (nos, seq, n);
+
+  int nos2[] = {1,2,3,4,5,6};
+  int seq2[] = {1,5,4,6,2,3};
+  n = 6;
+  isPossible (nos2, seq2, n);
+  cout<<endl;
+  return 0;
 }
