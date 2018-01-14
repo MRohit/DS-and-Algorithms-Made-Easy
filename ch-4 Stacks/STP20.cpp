@@ -1,7 +1,7 @@
 /*
-  Problem 3: Postfix expression evaluation
+  Problem 20: Given a string containing push (S)/ Pop (X) operations. Find if string is valid
   Time Complexity: O(n)
-  Space Complexity: O(n) for stack
+  Space Complexity: O(1)
 
 **/
 
