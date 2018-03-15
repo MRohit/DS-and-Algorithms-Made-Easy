@@ -1,5 +1,5 @@
 /*
-Problem 1: Reverse a queue only using queue methods
+Problem 2: Implement queue using two stacks
 Time Complexity:O(n)
 Space Complexity: O(n)
 **/
