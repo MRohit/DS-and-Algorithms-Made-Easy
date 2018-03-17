@@ -78,3 +78,52 @@ void deleteQueue (Queue *q) {
     free (q);
   }
 }
+int checkPairWiseOrder (stack <int> st) {
+  Queue *q = initializeQueue (20);
+  int flag = 1;
+  while (!st.empty()) {
+    enQueue (q, st.top());
+    st.pop();
+  }
+  while (!isEmpty (q)) {
+    st.push (deQueue (q));
+  }
+  while (!st.empty()) {
+    int n = st.top();
+    st.pop();
+    enQueue (q, n);
+    if (!st.empty()) {
+      int m = st.top();
+      enQueue (q, m);
+      st.pop();
+      if (abs (n-m) != 1) {
+        //cout <<"\nN:"<<n<<" M:"<<m<< " Abs:"<<abs (n-m);
+        return 0;
+      }
+    }
+  }
+  while (!isEmpty (q)) {
+    st.push (deQueue (q));
+  }
+  return 1;
+}
+int main (void) {
+  stack <int> st;
+  st.push (4);
+  st.push (5);
+  st.push (-2);
+  st.push (-3);
+  st.push (11);
+  st.push (10);
+  st.push (5);
+  st.push (6);
+  st.push (20);
+  int flag = checkPairWiseOrder (st);
+  if (flag == 1) {
+    cout <<"\n Pairs are ordered";
+  } else {
+    cout <<"\nPairs are not ordered";
+  }
+  cout << endl;
+  return 0;
+}
