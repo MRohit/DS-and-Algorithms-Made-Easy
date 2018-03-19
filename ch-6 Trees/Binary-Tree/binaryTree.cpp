@@ -16,6 +16,77 @@ typedef struct Tree {
   struct Tree *left, *right;
 }BTree;
 
+typedef struct Queue {
+  int front, rear;
+  int cap,size;
+  BTree **arr;
+}Queue;
+
+Queue *initializeQueue (int size) {
+  Queue *q = (Queue*) malloc (sizeof (Queue));
+  q->front = q->rear = -1;
+  q->cap = size;
+  q->size = 0;
+  q->arr = (BTree**) malloc (sizeof (BTree*) * size);
+  if (!q->arr)
+    return NULL;
+  return q;
+}
+
+int isEmpty (Queue *q) {
+  return q->front == -1;
+}
+int isFull (Queue *q) {
+  return ((q->rear + 1) % q->cap == q->front);
+}
+
+void resizeQueue (Queue *q) {
+  int size = q->cap * 2;
+  q->cap = size;
+
+  q->arr = (BTree**) realloc (q->arr, q->cap);
+  if (!q->arr)
+    return;
+  if (q->front > q->rear) {
+    for (int i = 0; i < q->front; i ++) {
+      q->arr[i + size] = q->arr[i];
+    }
+    q->rear = q->rear + size;
+  }
+}
+void enQueue (Queue *q, BTree *data) {
+  if (isFull (q)) {
+    cout<<"\nQueue is full. Increasing Queue size";
+    resizeQueue (q);
+  }
+    q->rear = (q->rear + 1) % q->cap;
+    q->arr[q->rear] = data;
+    if (q->front == -1)
+      q->front = q->rear;
+    q->size ++;
+
+}
+
+BTree* deQueue (Queue *q) {
+  if (isEmpty (q))
+    return NULL;
+  BTree* data = q->arr[q->front];
+  if (q->front == q->rear)
+    q->front = q->rear = -1;
+  else
+    q->front = (q->front + 1) % q->cap;
+  q->size --;
+  return data;
+}
+
+void deleteQueue (Queue *q) {
+  if (q) {
+    if (q->arr)
+      free (q->arr);
+    free (q);
+  }
+}
+
 BTree* initializeNode () {
   BTree *root = (BTree*) malloc (sizeof (BTree));
   if (!root)  return NULL;
@@ -29,36 +100,55 @@ void preOrder (BTree *root) {
     preOrder (root->right);
   }
 }
-void insertNode (BTree **root, queue<BTree*> *q, int data) {
-  BTree *temp = initializeNode ();
-  temp->data = data;
-  if (*root == NULL) {
-    *root = temp;
-  } else {
 
-    BTree *front2 = q->front ();
-    if (!front2->left)
-      front2->left = temp;
-    else if (!front2->right)
-      front2->right = temp;
-    else
-      q->pop();
+void inOrder (BTree *root) {
+  if (root) {
+    inOrder (root->left);
+    cout <<root->data<<" ";
+    inOrder (root->right);
   }
-  q->push (*(&temp));
-  //return root;
+}
+
+void postOrder (BTree *root) {
+  if (root) {
+    postOrder (root->left);
+    postOrder (root->right);
+    cout <<root->data<<" ";
+  }
+}
+
+void insertNode (BTree **root) {
+  Queue *q = initializeQueue (20);
+  for (int i = 1; i < 10; i ++) {
+    BTree *node = initializeNode ();
+    node->data = i;
+    if (*root == NULL)
+      *root = node;
+    else {
+      BTree *front = q->arr[q->front];
+      if (front->left == NULL) {
+        front->left = node;
+      } else if (front->right == NULL){
+        front->right = node;
+      }
+      if (front->left && front->right){
+        deQueue (q);
+      }
+    }
+    enQueue (q, node);
+  }
 }
 
 int main (void) {
-  BTree *root = initializeNode ();
-  queue <BTree*> *q;
-  insertNode (&root, q, 1);
-  insertNode (&root, q, 2);
-  insertNode (&root, q, 3);
-  insertNode (&root, q, 4);
-  insertNode (&root, q, 5);
-  insertNode (&root, q, 6);
+  BTree *root = NULL;
 
+  insertNode (&root);
+  cout<<"\nPreorder Traversal:";
   preOrder (root);
+  cout<<"\nInorder Traversal:";
+  inOrder (root);
+  cout<<"\nPostOrder Traversal:";
+  postOrder (root);
   cout<<endl;
   return 0;
 }
