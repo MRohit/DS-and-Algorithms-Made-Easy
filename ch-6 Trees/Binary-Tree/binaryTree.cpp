@@ -29,28 +29,28 @@ void preOrder (BTree *root) {
     preOrder (root->right);
   }
 }
-void insertNode (BTree **root, queue<BTree*> *, int data) {
+void insertNode (BTree **root, queue<BTree*> *q, int data) {
   BTree *temp = initializeNode ();
   temp->data = data;
   if (*root == NULL) {
     *root = temp;
   } else {
 
-    BTree *front = q.front ();
-    if (!front->left)
-      front->left = temp;
-    else if (!front->right)
-      front->right = temp;
+    BTree *front2 = q->front ();
+    if (!front2->left)
+      front2->left = temp;
+    else if (!front2->right)
+      front2->right = temp;
     else
-      q.pop();
+      q->pop();
   }
-  q.push (&temp);
+  q->push (*(&temp));
   //return root;
 }
 
 int main (void) {
   BTree *root = initializeNode ();
-  queue <BTree*> q;
+  queue <BTree*> *q;
   insertNode (&root, q, 1);
   insertNode (&root, q, 2);
   insertNode (&root, q, 3);
