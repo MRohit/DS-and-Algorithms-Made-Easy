@@ -210,7 +210,20 @@ void nonRecursiveInOrder (BTree *root) {
 }
 
 void nonRecursivePostOrder (BTree *root) {
-  
+  Stack *st1 = initializeStack (20);
+  Stack *st2 = initializeStack (20);
+  push (st1, root);
+  while (!isStackEmpty (st1)) {
+    BTree *node = pop (st1);
+    push (st2, node);
+    if (node->left)
+      push (st1, node->left);
+    if (node->right)
+      push (st1, node->right);
+  }
+  while (!isStackEmpty (st2)) {
+    cout<<pop(st2)->data<< " ";
+  }
 }
 int main (void) {
   BTree *root = NULL;
@@ -226,6 +239,8 @@ int main (void) {
   nonRecursiveInOrder (root);
   cout<<"\nRecursive PostOrder Traversal:";
   postOrder (root);
+  cout<<"\nNon Recursive PostOrder Traversal:";
+  nonRecursivePostOrder (root);
   cout<<endl;
   return 0;
 }
