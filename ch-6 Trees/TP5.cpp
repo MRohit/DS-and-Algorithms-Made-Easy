@@ -1,5 +1,5 @@
 /*
-  Problem 4: Searching element in tree non recursively
+  Problem 5: Insert element into binary tree
   Time Complexity: O(n)
   Space Complexity: O(n)
 **/
@@ -95,23 +95,32 @@ BTree* initializeNode () {
   return root;
 }
 
-void insertNode (BTree **root) {
+void insertNode (BTree **root, int data) {
   Queue *q = initializeQueue (20);
-  for (int i = 1; i < 10; i ++) {
-    BTree *node = initializeNode ();
-    node->data = i;
-    if (*root == NULL)
-      *root = node;
-    else {
-      BTree *front = q->arr[q->front];
-      if (front->left == NULL)
-        front->left = node;
-      else if (front->right == NULL)
-        front->right = node;
-      if (front->left != NULL && front->right != NULL)
-        deQueue (q);
+  BTree *node = initializeNode ();
+  node->data = data;
+  if (*root == NULL)
+    *root = node;
+  else {
+    enQueue (q, *root);
+    while (!isEmpty (q)) {
+      BTree *temp = deQueue (q);
+      if (temp->left)
+        enQueue (q, temp->left);
+      else {
+        temp->left = node;
+        deleteQueue (q);
+        return;
+      }
+
+      if (temp->right)
+        enQueue (q, temp->right);
+      else {
+        temp->right = node;
+        deleteQueue (q);
+        return;
+      }
     }
-    enQueue (q, node);
   }
   deleteQueue (q);
 }
@@ -122,27 +131,17 @@ void preOrder (BTree *root) {
     preOrder (root->right);
   }
 }
-int findElement (BTree *root, int data) {
-  Queue *q = initializeQueue (20);
-  enQueue (q, root);
-  while (!isEmpty (q)) {
-    BTree *node = deQueue (q);
-    if (node->data == data)
-      return 1;
-    if (node->left)
-      enQueue (q, node->left);
-    if (node->right)
-      enQueue (q, node->right);
-  }
-  deleteQueue (q);
-  return 0;
-}
 int main (void) {
   BTree *root = NULL;
-  insertNode (&root);
+  insertNode (&root, 1);
+  insertNode (&root, 2);
+  insertNode (&root, 3);
+  insertNode (&root, 4);
+  insertNode (&root, 5);
+  insertNode (&root, 6);
+
   cout<<"\nPreorder Traversal:";
   preOrder (root);
-  cout<<"\nIs element present:"<<findElement (root, 5);
   cout<<endl;
   return 0;
 }
