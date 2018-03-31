@@ -122,14 +122,39 @@ void preOrder (BTree *root) {
   }
 }
 int getMaxLevel (BTree *root) {
-  return 0;
+  Queue *q = initializeQueue (20);
+  if (root == NULL)
+    return 0;
+  int maxLevel = 0, maxSum = 0, sum = 0,level = 0;
+  enQueue (q, root);
+  enQueue (q, NULL);
+  while (!isEmpty (q)) {
+    BTree *node = deQueue (q);
+    if (node == NULL) {
+      if (sum > maxSum) {
+        maxSum = sum;
+        maxLevel = level;
+      }
+      sum = 0;
+      if (!isEmpty (q))
+        enQueue (q, NULL);
+      level ++;
+    } else {
+      sum += node->data;
+      if (node->left)
+        enQueue (q, node->left);
+      if (node->right)
+        enQueue (q, node->right);
+    }
+  }
+  return maxLevel;
 }
 int main (void) {
   BTree *root = NULL;
   insertNode (&root);
   cout<<"\nPreorder Traversal Tree 1:";
   preOrder (root);
-  cout<<"\nLevel with maximum sum:"<<getMaxLevel(root);
+  cout<<"\nLevel having maximum sum:"<<getMaxLevel(root);
   cout<<endl;
   return 0;
 }
