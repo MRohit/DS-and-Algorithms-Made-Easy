@@ -7,6 +7,7 @@
 #include<iostream>
 #include<stdlib.h>
 #include<queue>
+#include<vector>
 using namespace std;
 
 /*
@@ -121,17 +122,56 @@ void preOrder (BTree *root) {
     preOrder (root->right);
   }
 }
+bool getPath (BTree *root, vector<int> &path, int k) {
+  if (root == NULL) return false;
 
+  path.push_back(root->data);
+
+  if(root->data == k)
+    return true;
+
+  if ((root->left && getPath (root->left, path, k)) || (root->right && getPath (root->right, path, k)))
+    return true;
+
+  path.pop_back();
+  return false;
+}
 int findLCA (BTree *root, int nodeA, int nodeB) {
+  vector<int> path1, path2;
+
+  if (!getPath(root, path1, nodeA) || !getPath(root, path2, nodeB))
+    return -1;
+
+    int i = 0;
+  for (i = 0; i < path1.size() && i < path2.size(); i++) {
+    if (path1[i] != path2[i])
+      break;
+  }
+  return path1[i-1];
+}
+BTree* findLCA_SingleTraversal (BTree *root, int nodeA, int nodeB) {
+  if (root == NULL)
+    return NULL;
+
+  if (root->data == nodeA || root->data == nodeB)
+    return root;
+
+  BTree *left = findLCA_SingleTraversal (root->left, nodeA, nodeB);
+  BTree *right = findLCA_SingleTraversal (root->right, nodeA, nodeB);
+
+  if (left && right)
+    return root;
+
+  return (left != NULL) ? left : right;
 
 }
 int main (void) {
   BTree *root = NULL;
   insertNode (&root);
-  cout<<"\nBefore mirroring, Preorder Traversal Tree:";
   preOrder (root);
   int nodeA = 8, nodeB = 11;
-  cout<<"\nLCA of "<<nodeA<<" & "<<nodeB<<" is:"<<findLCA (root, nodeA, nodeB);
+  cout<<"\nUsing Vector--> LCA of "<<nodeA<<" & "<<nodeB<<" is:"<<findLCA (root, nodeA, nodeB);
+  cout<<"\nUsing Single Traversal--> LCA of "<<nodeA<<" & "<<nodeB<<" is:"<<(findLCA_SingleTraversal (root, nodeA, nodeB))->data;
   cout<<endl;
   return 0;
 }
