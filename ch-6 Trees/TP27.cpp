@@ -39,17 +39,18 @@ void inOrder (BTree *root) {
     inOrder (root->right);
   }
 }
-int search (string inOrder, int start,int end, char c) {
+int search (char inOrder[], int start,int end, char c) {
   int i=0;
-  for(int i = start; i <= end; i ++) {
+  for(i = start; i <= end; i ++) {
     if (inOrder[i] == c)
       return i;
   }
-  return -1;
+  return 0;
 }
-BTree * buildTree (char preOrder[], int start, char inOrder[], int end) {
-  static int preIndex = 0;
 
+BTree * buildTree (char preOrder[], int start, char inOrder[], int end) {
+
+  static int preIndex = 0;
   if (start > end)
     return NULL;
 
@@ -65,8 +66,8 @@ BTree * buildTree (char preOrder[], int start, char inOrder[], int end) {
 }
 int main (void) {
   BTree *root = NULL;
-  char preOrderStr[] = {'D','B','E','A','F','C'};
-  char inOrderStr[] = {'A','B','D','E','C','F'};
+  char inOrderStr[] = {'D','B','E','A','F','C'};
+  char preOrderStr[] = {'A','B','D','E','C','F'};
   int len = sizeof(preOrderStr)/sizeof(preOrderStr[0]);
   root = buildTree (preOrderStr, 0, inOrderStr, len-1);
   cout<<"\nPreOrder Traversal:";
