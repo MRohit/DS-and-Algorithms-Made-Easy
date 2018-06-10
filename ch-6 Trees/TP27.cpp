@@ -1,5 +1,5 @@
 /*
-  Problem 27: Finding LCA in a BTree
+  Problem 27: Constructing a Binary tree using Inorder and Preorder traversal.
   Time Complexity: O(n)
   Space Complexity: O(n)
 **/
@@ -49,19 +49,27 @@ int search (char inOrder[], int start,int end, char c) {
 }
 
 BTree * buildTree (char preOrder[], int start, char inOrder[], int end) {
-
+  // 1. Start with Preindex as 0
   static int preIndex = 0;
+  // return from recursion
   if (start > end)
     return NULL;
-
+  // 2. Initialize node with current PreIndex and increment it
   BTree *node = initializeNode ();
   node->data = preOrder[preIndex++];
+
+  // return
   if (start == end)
     return node;
+  // 3. find the current node data in inorder
   int inIndex = search (inOrder, start,end, node->data);
 
+  // 4. Call recursively with inIndex - 1 and assign it as left subtree
   node->left = buildTree (preOrder, start, inOrder, inIndex-1);
+  // 5. Call recursively with inIndex + 1 and assign it as right subtree
   node->right = buildTree (preOrder, inIndex+1, inOrder, end);
+
+  // 6. return root;
   return node;
 }
 int main (void) {
