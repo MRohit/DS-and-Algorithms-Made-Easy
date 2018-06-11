@@ -117,15 +117,54 @@ void insertNode (BTree **root) {
   }
   deleteQueue (q);
 }
-void preOrder (BTree *root) {
+void inOrder (BTree *root) {
   if (root) {
+
+    inOrder (root->left);
     cout<<root->data<<" ";
-    preOrder (root->left);
-    preOrder(root->right);
+    inOrder(root->right);
   }
 }
+int search (int in[], int start, int end, int value) {
+  int i;
+  for (i = 0; i <= end; i++) {
+    if (in[i] == value)
+      break;
+  }
+  return i;
+}
+BTree* buildUtil (int in[], int post[], int start, int end, int *postLastIndex) {
+  // 1. return from recursion
+  if (start > end)
+    return NULL;
+  // 2. Initialize node with current PreIndex and increment it
+  BTree *node = initializeNode ();
+  node->data = post[*postLastIndex];
+  (*postLastIndex) --;
+  if (start == end)
+    return node;
+
+  // 3. find the current node data in inorder
+  int inIndex = search (in, start, end, node->data);
+  // 4. Call recursively with inIndex + 1 and assign it as right subtree
+  node->right = buildUtil (in, post, inIndex + 1, end, postLastIndex);
+  // 5. Call recursively with inIndex - 1 and assign it as left subtree
+  node->left = buildUtil (in, post, start, inIndex - 1, postLastIndex);
+
+  return node;
+}
+BTree* buildTree (int in[], int post[], int end) {
+  int postLastIndex = end;
+  return buildUtil (in, post, 0, end, &postLastIndex);
+}
 int main (void) {
-  BTree *root = NULL;
-  insertNode (&root);
-  preOrder(root);
+  int in[]   = {4, 8, 2, 5, 1, 6, 3, 7};
+  int post[] = {8, 4, 5, 2, 6, 7, 3, 1};
+  int n = sizeof(in)/sizeof(in[0]);
+
+  BTree *root = buildTree(in, post, n - 1);
+
+  cout  << "In Order of the constructed tree : \n";
+  inOrder(root);
+  return 0;
 }
