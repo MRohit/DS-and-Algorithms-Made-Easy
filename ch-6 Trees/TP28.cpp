@@ -157,14 +157,53 @@ BTree* buildTree (int in[], int post[], int end) {
   int postLastIndex = end;
   return buildUtil (in, post, 0, end, &postLastIndex);
 }
+
+int *extractKeys (int in[], int level[], int m, int n) {
+  int *newLevel = new int [m], j =0;
+  for (int i = 0; i < n; i++) {
+    if (search (in, 0, m-1, level[i]))
+      newLevel[j] = level[i], j++;
+  }
+  return newLevel;
+}
+BTree *buildTreeUsingLevelAndInOrderTra (int in2[], int level[], int start, int end, int n) {
+  if (start > end)
+    return NULL;
+  BTree *node = initializeNode();
+  node->data = level[0];
+
+  if (start == end)
+    return node;
+  int inIndex = search (in2, start, end, node->data);
+
+  int *llevel = extractKeys (in2, level, inIndex, n);
+
+  int *rlevel = extractKeys (in2 + inIndex + 1, level, n-inIndex-1, n);
+
+  node->left = buildTreeUsingLevelAndInOrderTra (in2, llevel, start, inIndex - 1, n);
+
+  node->right = buildTreeUsingLevelAndInOrderTra (in2, rlevel, inIndex + 1, end, n);
+
+  return node;
+}
 int main (void) {
   int in[]   = {4, 8, 2, 5, 1, 6, 3, 7};
   int post[] = {8, 4, 5, 2, 6, 7, 3, 1};
+
   int n = sizeof(in)/sizeof(in[0]);
 
   BTree *root = buildTree(in, post, n - 1);
 
   cout  << "In Order of the constructed tree : \n";
   inOrder(root);
+
+  int in2 [] = {4, 8, 10, 12, 14, 20, 22};
+  int level[] = {20, 8, 22, 4, 12, 10, 14};
+  n = sizeof(in2)/sizeof(in2[0]);
+
+  BTree *root2 = buildTreeUsingLevelAndInOrderTra (in2, level, 0, n-1, n);
+  cout  << "In Order tree constructed using level and inorder : \n";
+  inOrder(root2);
+
   return 0;
 }
