@@ -1,7 +1,7 @@
 /*
   Problem 30: Printing tree in zigzag traversal
   Time Complexity: O(n)
-  Space Complexity: O(n)
+  Space Complexity: O(n) + O(n) for two stacks
 **/
 
 #include<iostream>
@@ -154,7 +154,7 @@ void printZigzag (BTree *root) {
     }
 
     if (currentLevel.empty()) {
-      leftToRight = false;
+      leftToRight = !leftToRight;
       swap (currentLevel, nextLevel);
     }
   }
