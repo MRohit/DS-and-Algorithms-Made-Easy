@@ -1,0 +1,12 @@
+Question: How many different binary trees are possible with n nodes
+
+Answer: Consider a tree with 3 nodes (n = 3). It will have the maximum combination of 5 different trees
+
+1.  1     2.      1       3.      1         4.    1             5.          1
+  /  \           /               /                  \                         \
+2     3         2               2                     2                         2
+              /                   \                     \                     /
+            3                       3                     3                  3
+
+
+    In general, if there are n nodes, there exists 2^n - n different trees
