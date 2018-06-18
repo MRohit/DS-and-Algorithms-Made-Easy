@@ -1,0 +1,8 @@
+Question: For a 4-ary tree, what is the maximum possible height with 100 nodes? Assume height of single node is 0
+
+Answer: In 4-ary tree each node can contain 0 to 4 children and to get maximum height, we need to keep only one child
+  for each parent. With 100 nodes the maximum possible height we can get is 99.
+
+  If we have a restriction that at least one node has 4 children, then we keep one node with 4 children and remaining
+  nodes with 1 child. In this case, the maximum possible height is 96%. Similarly, with n nodes the maximum possible height
+  is n-4
