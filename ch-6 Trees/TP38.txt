@@ -1,0 +1,21 @@
+Question: For a 4-ary tree, what is the minimum possible height with n nodes?
+
+Answer: Similar to problem 37, if we want to get minimum height, then we need to fill all nodes with maximum children
+(in this case 4). Refer below table
+
+  Height (h)        Maximum Nodes at Height h = 4^h         Total Nodes height h = (4^(h+1) - 1) / 3
+    0                             1                                           1
+    1                             4                                           1 + 4
+    2                             4 X 4                                       1 + 4 X 4
+    3                             4 X 4 X 4                                   1 + 4 X 4 X 4 X 4
+
+
+  For a given height h the maximum possible nodes are (4 ^ (h + 1) - 1) / 3. To get minimum height, take logarithm on
+  both sides:
+
+          4 ^ (h + 1) - 1
+    n =   --------------        ==> 4 ^ (h + 1) = 3n + 1  ==> (h + 1)log4 = log (3n + 1).
+                3
+
+
+      h + 1 = log4 (3n + 1)     ==> h = log4 (3n + 1) - 1
