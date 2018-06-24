@@ -134,11 +134,11 @@ void preOrder (BTree *root) {
   }
 }
 
-BTree *preorderSuccessor (BTree *root) {
+BTree *preorderSuccessor (BTree *node) {
   BTree *temp;
   stack <BTree*> st;
   if (temp != NULL)
-    temp = root;
+    temp = node;
   if (temp->left != NULL) {
     st.push (temp);
     temp = temp->left;
@@ -158,7 +158,8 @@ int main () {
   insertNode (&root, false);
   cout<<"\n Preorder traversal for tree:";
   preOrder(root);
-  cout<<"\nPreorder successor:"<<(preorderSuccessor (root)) ->data;
+  BTree *node = root->left->right;
+  cout<<"\nPreorder successor of:"<<node->data<<" is:"<< (preorderSuccessor (node)) ->data;
   cout<<endl;
   return 0;
 }
