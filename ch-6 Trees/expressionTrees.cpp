@@ -15,7 +15,7 @@ defining the structure
 **/
 typedef struct Tree {
 
-  int data;
+  char data;
   struct Tree *left, *right;
 }BTree;
 
@@ -26,22 +26,42 @@ BTree* initializeNode () {
   return root;
 }
 
-void preOrder (BTree *root) {
+void inOrder (BTree *root) {
   if (root) {
+
+    inOrder (root->left);
     cout<<root->data<<" ";
-    preOrder (root->left);
-    preOrder (root->right);
+    inOrder (root->right);
   }
 }
 
-int main () {
+BTree *buildExpressionTree (char expr[], int size) {
+  stack <BTree*> st;
+  for (int i = 0; i < size; i++) {
+    if (isalpha (expr[i])) {
+      BTree *node = initializeNode ();
+      node->data = expr[i];
+      st.push (node);
+    } else {
+      BTree *t2 = st.top();st.pop();
+      BTree *t1 = st.top();st.pop();
+      BTree *node = initializeNode ();
+      node->data = expr[i];
+      node->left = t1;
+      node->right = t2;
+      st.push (node);
+    }
+  }
+
+  return st.top();
+}
+int main (void) {
   BTree *root = NULL;
-  insertNode (&root, false);
-  cout<<"\n Preorder traversal for tree:";
-  preOrder(root);
-  BTree *node = root->left->right;
-  cout<<"\nNode:"<<node->data;
-  cout<<"\nInorder successor of:"<<node->data<<" is:"<< (inorderSuccessor (node)) ->data;
+  char ch[] = {'A','B','C','*','+','D','/'};
+  int n = sizeof (ch) / sizeof (ch[0]);
+  root = buildExpressionTree (ch, n);
+  cout<<"\n Inorder traversal for tree:";
+  inOrder(root);
   cout<<endl;
   return 0;
 }
