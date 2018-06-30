@@ -52,19 +52,23 @@ int distanceFromRoot (BSTree *root, int x) {
   if (root->data == x)
     return 0;
   else if (root->data > x)
-    return distanceFromRoot (root->right, x);
+    return 1 + distanceFromRoot (root->left, x);
   else
-    return distanceFromRoot (root->left, x);
+    return 1 + distanceFromRoot (root->right, x);
 }
 int findSmallestDistance (BSTree *root, int a, int b) {
+  // base conditon
   if (!root)
     return 0;
-  if (a <= root->data && root->data <= b) {
-    return distanceFromRoot (root, a) + distanceFromRoot (root, b);
-  } else if (root->data > a && root->data > b)
+  // a and b are smaller than root then look in left sub tree
+  if (root->data > a && root->data > b)
     return findSmallestDistance (root->left, a, b);
-  else
+  // a and b are greater than root then look in right sub tree
+  if (root->data < a && root->data < b)
     return findSmallestDistance (root->right, a, b);
+  // we've lca node, find its distance from both a and b
+  if (root->data >= a && root->data <= b)
+    return distanceFromRoot (root, a) + distanceFromRoot (root, b);
 }
 int main (void) {
   BSTree *root = NULL;
@@ -76,9 +80,9 @@ int main (void) {
 
   cout<<"\n Inorder traversal for tree:";
   inOrder(root);
-  int a = 10, b = 40;
-  swap(a,b);
-  cout<<"\nLCA of a:"<<a<<" b:"<<b<<" is:"<<findSmallestDistance (root, a, b);
+  int a = 40, b = 105;
+  //swap(a,b);
+  cout<<"\nSmallest distance between a:"<<a<<" b:"<<b<<" is:"<<findSmallestDistance (root, a, b);
   cout<<endl;
   return 0;
 }
