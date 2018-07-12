@@ -58,7 +58,7 @@ void convertBSTToSortedDLL (BSTree *root, BSTree *& head, BSTree *& prev) {
     head = root;
 
   BSTree *right = root->right;
-  head->left = root;
+  //head->left = root;
   //root->right = head;
   prev = root;
   convertBSTToSortedDLL (right, head, prev);
