@@ -53,10 +53,13 @@ void convertBSTToSortedDLL (BSTree *root, BSTree *& head, BSTree *& prev) {
     return;
   convertBSTToSortedDLL (root->left, head, prev);
   if(prev)
-    head = prev;
+    prev->right = root;
+  else
+    head = root;
+
   BSTree *right = root->right;
   head->left = root;
-  root->right = head;
+  //root->right = head;
   prev = root;
   convertBSTToSortedDLL (right, head, prev);
 }
@@ -67,6 +70,75 @@ void printDLL (BSTree *head) {
     cout<<temp->data<<" -> ";
     temp = temp->right;
   }
+}
+
+BSTree *mergeDoublyLinkedList (BSTree *head1, BSTree *head2) {
+  BSTree *node = NULL, *temp = NULL;
+  node = initializeNode ();
+  node->right = temp;
+  node->left = NULL;
+  temp = node;
+  while (head1 != NULL && head2 != NULL) {
+    if (head1->data == head2->data) {
+      temp->right = head1;
+      head1->left = temp;
+      temp = temp->right;
+      head1 = head1->right;
+      head2 = head2->right;
+    } else if (head1->data < head2->data) {
+      temp->right = head1;
+      head1->left = temp;
+      temp = temp->right;
+      head1 = head1->right;
+    } else {
+      temp->right = head2;
+      head2->left = temp;
+      temp = temp->right;
+      head2 = head2->right;
+    }
+  }
+
+  if (head1 != NULL) {
+    temp->right = head1;
+    head1->left = temp;
+  } else if (head2 != NULL){
+    temp->right = head2;
+    head2->left = temp;
+  }
+
+  temp = node->right;
+  free (node);
+  return temp;
+}
+
+int getCount (BSTree *head) {
+  BSTree *temp = head;
+  int cnt = 0;
+  while (temp != NULL) {
+    cnt ++;
+    temp = temp->right;
+  }
+  return cnt;
+}
+
+BSTree *convertSortedDLLToBST (BSTree **head, int n) {
+  // base case
+  if (n <= 0)
+    return NULL;
+  // recursively construct left subtree
+  BSTree *left = convertSortedDLLToBST (head, n/2);
+
+  // construct the node
+  BSTree *node = initializeNode ();
+  node->data = (*head)->data;
+  // set pointer to left subtree
+  node->left = left;
+  // move to next node in DLL
+  *head = (*head)->right;
+  // recursively construct right subtree
+  node->right = convertSortedDLLToBST (head, n-n/2-1);
+
+  return node;
 }
 int main (void) {
   BSTree *root = NULL, *root2 = NULL;
@@ -84,10 +156,27 @@ int main (void) {
   inOrder(root);
   cout<<"\n Inorder traversal for tree 2: ";
   inOrder(root2);
-  BSTree *head1 = NULL, *prev = NULL;
-  convertBSTToSortedDLL (root, head1, prev);
+  BSTree *head1 = NULL, *prev1 = NULL, *head2 = NULL, *prev2 = NULL;
+  // 1. Convert both BST into sorted doubly linked list
+  convertBSTToSortedDLL (root, head1, prev1);
   cout<<"\nSorted DLL of Tree 1:";
   printDLL (head1);
+  convertBSTToSortedDLL (root2, head2, prev2);
+  cout<<"\nSorted DLL of Tree 1:";
+  printDLL (head2);
+
+  // 2. Merge both doubly linked list and maintain count.
+  BSTree *head3 = mergeDoublyLinkedList (head1, head2);
+  cout<<"\nMerged DLL:";
+  printDLL (head3);
+
+  // 3. Get count of number of elements of merged DLL
+  int count = getCount (head3);
+
+  // 4. Construct BST of newly merged sorted DLL
+  BSTree *unionRoot = convertSortedDLLToBST (&head3,count);
+  cout<<"\n Inorder traversal of union tree:";
+  inOrder (unionRoot);
   cout<<endl;
   return 0;
 }
